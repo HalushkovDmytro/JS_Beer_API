@@ -30,7 +30,7 @@ export function createRecentSearch(){
     recentItem.innerHTML = `<a>${inputId.value}</a>`;
     recentContainer.prepend(recentItem);
     recentArray.push(inputId.value);
-    recentItem.addEventListener('click', function(){
+    recentItem.addEventListener('click', function repeatSearch(){
         inputId.value = recentItem.innerText;
         recentItem.remove();
         recentArray.splice(recentArray[recentItem + 1], 1);
