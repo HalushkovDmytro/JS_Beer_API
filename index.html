@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="./style.css">
+    <title>JS_API</title>
+</head>
+<body>
+<header class="header">
+    <div class="headerContainer container">
+
+            <div class="headerTitle">
+                <h1 class="headerTitleName">
+                    Beer Finder
+                </h1>
+            </div>
+
+            <div class="searchGroup" id="searchGroup">
+
+                <input type="text" name="searchBox" id="inputId" placeholder="Type Here..." class="searchInput" >
+
+                <button class="searchBtn" type="submit" id="searchId">
+                    <img src="./img/searchIcon.png" alt="search" >
+                </button>
+
+            </div>
+
+        <div class="recentContainer" id="recentContainer"></div>
+
+        <div class="favouriteBtnContainer">
+            <a class="favouriteBtn btn" id="favouriteBtn">Favorites</a>
+        </div>
+    </div>
+</header>
+
+<main class="mainSection">
+    <div class="beerResultContainer" id="beerResultContainer"></div>
+
+</main>
+
+<script src="./script.js" type="module"></script>
+</body>
+</html>
