@@ -1,4 +1,7 @@
-import {inputId, mainContainer, recentArray, regex, recentContainer} from "./Variables.js";
+import {inputBox, mainContainer, recentArray, beerListArray, regex, recentContainer} from "./Variables.js";
+import {CreateBeer} from './CreateBeer.js';
+
+let pageStart = 1;
 
 export function validInput(beerName){
     return beerName.match(regex)
@@ -6,112 +9,68 @@ export function validInput(beerName){
 
 export function startSearch(){
     createRecentSearch();
-    fetchName();
-    inputId.placeholder = inputId.value;
-    inputId.value = '';
+    getBeer();
+    inputBox.placeholder = inputBox.value;
+    inputBox.value = '';
+    window.scrollTo(0,100 + recentArray.length * 40);
 }
 
 export function declineSearch() {
-    inputId.style.color = 'rgba(246, 15, 15, 0.622)';
-    inputId.style.fontWeight = 'bold';
-    inputId.style.border = '1px solid rgba(246, 15, 15, 0.622)';
+    inputBox.style.color = 'rgba(246, 15, 15, 0.622)';
+    inputBox.style.fontWeight = 'bold';
+    inputBox.style.border = '1px solid rgba(246, 15, 15, 0.622)';
+    inputBox.style.backgroundColor = 'rgba(215,24,24,0.57)';
     setTimeout(() => {
-        inputId.style.color = 'black';
-        inputId.style.fontWeight = 'normal';
-        inputId.style.border = 'none';
-    },2000);
+        inputBox.style.color = 'black';
+        inputBox.style.fontWeight = 'normal';
+        inputBox.style.border = 'none';
+        inputBox.style.backgroundColor = 'white';
+    },500);
 };
 
 export function createRecentSearch(){
-    const recentItem = document.createElement('div');
+    const uniqueArray = [... new Set(recentArray)]
 
-    recentItem.setAttribute('id',`${inputId.value}`)
-    recentItem.className = 'recentEl';
-    recentItem.innerHTML = `<a>${inputId.value}</a>`;
-    recentContainer.prepend(recentItem);
-    recentArray.push(inputId.value);
-    recentItem.addEventListener('click', function(){
-        inputId.value = recentItem.innerText;
-        recentItem.remove();
-        recentArray.splice(recentArray[recentItem + 1], 1);
-    })
-};
-
-
-export function createElements(arr){
-    if (!arr.length) {
-        const errorContainer = document.createElement('div');
-
-        errorContainer.className = 'beerDiv';
-        errorContainer.setAttribute('id', `errorContainer`)
-        mainContainer.appendChild(errorContainer);
-
-        const errorElement = document.createElement('p');
-
-        errorElement.className = 'errorMessage';
-        errorElement.setAttribute('id', 'error');
-        errorElement.innerText = 'There were no properties found for the given location.'
-        errorContainer.appendChild(errorElement);
-
+    if (uniqueArray.includes(inputBox.value)) {
+        return
     }
 
-    arr.forEach((item) => {
-        const elementContainer = document.createElement('div');
+    recentContainer.innerHTML += `
+        <div class="recentEl" id="${inputBox.value}">${inputBox.value}</div>
+        `;
+    recentArray.push(inputBox.value);
+};
 
-        elementContainer.className = 'beerDiv';
-        elementContainer.setAttribute('id', `${item.id}`)
-        mainContainer.appendChild(elementContainer);
+export function getBeer() {
+    const value = inputBox.value.replaceAll(' ', '_').trim();
 
-        const beerTitle = document.createElement('h3');
-
-        beerTitle.className = 'beerTitle';
-        beerTitle.innerText = item.name;
-        elementContainer.appendChild(beerTitle);
-
-        const imgContainer = document.createElement('div');
-
-        imgContainer.className = 'beerImgContainer';
-        elementContainer.appendChild(imgContainer)
-
-        const beerImage = document.createElement('img');
-
-        beerImage.className = 'beerImage';
-        beerImage.src = item.image_url || './img/beerBottle2.png';
-        imgContainer.append(beerImage);
-
-        const beerAboutContainer = document.createElement('div');
-
-        beerAboutContainer.className = 'beerAbout';
-        elementContainer.appendChild(beerAboutContainer);
-
-        const beerDescription = document.createElement('p');
-
-        beerDescription.className = 'beerDescription';
-        beerDescription.innerText = item.description;
-        beerAboutContainer.appendChild(beerDescription);
-
-        const beerPriceContainer = document.createElement('div');
-
-        beerPriceContainer.className = 'beerPriceContainer';
-        elementContainer.appendChild(beerPriceContainer);
-
-        const beerPrice = document.createElement('p');
-
-        beerPrice.className = 'beerPrice';
-        beerPrice.innerText = 'PRICE';
-        beerPriceContainer.appendChild(beerPrice);
-    })
-
-}
-
-export function fetchName() {
-    const value = inputId.value.replaceAll(' ', '_').trim();
-
-    fetch(`https://api.punkapi.com/v2/beers?page=1&per_page=80&beer_name=${value}`)
+    fetch(`https://api.punkapi.com/v2/beers?beer_name=${value}&page=${pageStart}&per_page=80`)
         .then((response) => response.json())
         .then((result) => {
-            mainContainer.innerText = '';
-            createElements(result);
+
+            if(!result.length){
+                return mainContainer.innerHTML = CreateBeer.getError();
+            }
+
+            mainContainer.innerHTML = '';
+            beerListArray.length = 0;
+            showBeerList(result)
         })
 }
+
+export function showBeerList(source){
+    source.forEach((item) => {
+        const newBeer = new CreateBeer({
+            id: `${item.id}`,
+            name:`${item.name}`,
+            image: `${item.image_url}`,
+            description: `${item.description}`
+        });
+
+        beerListArray.push(newBeer)
+        mainContainer.innerHTML += newBeer.getInnerHtml()
+    })
+}
+
+
 
