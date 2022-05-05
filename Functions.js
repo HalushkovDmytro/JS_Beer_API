@@ -24,7 +24,7 @@ export function startSearch(){
     INPUT_BOX.placeholder = INPUT_BOX.value;
     INPUT_BOX.value = '';
     NO_MORE_DATA.style.display = STYLE.DISPLAY.NONE;
-    window.scrollTo(0,100 + RECENT_ARRAY.length * 40);
+    window.scrollTo(0, 100 + RECENT_ARRAY.length * 40);
 }
 
 export function declineSearch(){
@@ -103,7 +103,6 @@ export function additionalItems(){ //adding 5 more items to the list
                 if (CreateBeer.getError()){
                     return
                 }
-
             }
 
             showBeerList(result)
