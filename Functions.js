@@ -20,6 +20,7 @@ export function declineSearch() {
     inputBox.style.fontWeight = 'bold';
     inputBox.style.border = '1px solid rgba(246, 15, 15, 0.622)';
     inputBox.style.backgroundColor = 'rgba(215,24,24,0.57)';
+    
     setTimeout(() => {
         inputBox.style.color = 'black';
         inputBox.style.fontWeight = 'normal';
@@ -48,7 +49,7 @@ export function getBeer() {
         .then((response) => response.json())
         .then((result) => {
 
-            if(!result.length){
+            if (!result.length){
                 return mainContainer.innerHTML = CreateBeer.getError();
             }
 
