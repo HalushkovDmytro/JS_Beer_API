@@ -36,13 +36,13 @@ RECENT_CONTAINER.addEventListener('click', function startRecentSearch(e) {
     startSearch();
 });
 
-window.onscroll = () => {
+window.addEventListener('scroll', function scrollIcon() {
     if (window.scrollY > 400) {
-        SCROLL_BTN.classList.remove('arrowUpHide')
+        scrollBtn.classList.remove('arrowUpHide')
     } else if (window.scrollY < 400) {
-        SCROLL_BTN.classList.add('arrowUpHide')
+        scrollBtn.classList.add('arrowUpHide')
     }
-}
+});
 
 SCROLL_BTN.addEventListener('click', function navigateToFirstEl(){
     window.scrollTo(0,100 + RECENT_ARRAY.length * 40)
