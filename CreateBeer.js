@@ -1,8 +1,8 @@
 export class CreateBeer {
-    this.id
-    this.name
-    this.image
-    this.description
+    id
+    name
+    image
+    description
 
     constructor(BeerData) {
         Object.assign(this, {...BeerData})
