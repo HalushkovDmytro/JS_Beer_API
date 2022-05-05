@@ -29,7 +29,7 @@ export function declineSearch() {
 };
 
 export function createRecentSearch(){
-    const uniqueArray = [... new Set(recentArray)]
+    const uniqueArray = [...new Set(recentArray)]
 
     if (uniqueArray.includes(inputBox.value)) {
         return
