@@ -1,60 +1,60 @@
-import {inputBox, mainContainer, recentArray, beerListArray, regex, recentContainer} from "./Variables.js";
+import {INPUT_BOX , MAIN_CONTAINER , RECENT_ARRAY , BEER_LIST , REGEX , RECENT_CONTAINER } from "./Variables.js";
 import {CreateBeer} from './CreateBeer.js';
 
 let pageStart = 1;
 
 export function validInput(beerName){
-    return beerName.match(regex)
+    return beerName.match(REGEX)
 }
 
 export function startSearch(){
     createRecentSearch();
     getBeer();
-    inputBox.placeholder = inputBox.value;
-    inputBox.value = '';
-    window.scrollTo(0,100 + recentArray.length * 40);
+    INPUT_BOX.placeholder = INPUT_BOX.value;
+    INPUT_BOX.value = '';
+    window.scrollTo(0,100 + RECENT_ARRAY.length * 40);
 }
 
 export function declineSearch() {
-    inputBox.style.color = 'rgba(246, 15, 15, 0.622)';
-    inputBox.style.fontWeight = 'bold';
-    inputBox.style.border = '1px solid rgba(246, 15, 15, 0.622)';
-    inputBox.style.backgroundColor = 'rgba(215,24,24,0.57)';
+    INPUT_BOX.style.color = 'rgba(246, 15, 15, 0.622)';
+    INPUT_BOX.style.fontWeight = 'bold';
+    INPUT_BOX.style.border = '1px solid rgba(246, 15, 15, 0.622)';
+    INPUT_BOX.style.backgroundColor = 'rgba(215,24,24,0.57)';
     
     setTimeout(() => {
-        inputBox.style.color = 'black';
-        inputBox.style.fontWeight = 'normal';
-        inputBox.style.border = 'none';
-        inputBox.style.backgroundColor = 'white';
+        INPUT_BOX.style.color = 'black';
+        INPUT_BOX.style.fontWeight = 'normal';
+        INPUT_BOX.style.border = 'none';
+        INPUT_BOX.style.backgroundColor = 'white';
     },500);
 };
 
 export function createRecentSearch(){
-    const uniqueArray = [...new Set(recentArray)]
+    const uniqueArray = Array.from(new Set(RECENT_ARRAY))
 
-    if (uniqueArray.includes(inputBox.value)) {
+    if (uniqueArray.includes(INPUT_BOX.value)) {
         return
     }
 
-    recentContainer.innerHTML += `
-        <div class="recentEl" id="${inputBox.value}">${inputBox.value}</div>
+    RECENT_CONTAINER.innerHTML += `
+        <div class="recentEl" id="${INPUT_BOX.value}">${INPUT_BOX.value}</div>
         `;
-    recentArray.push(inputBox.value);
+    RECENT_ARRAY.push(INPUT_BOX.value);
 };
 
 export function getBeer() {
-    const value = inputBox.value.replaceAll(' ', '_').trim();
+    const value = INPUT_BOX.value.replaceAll(' ', '_').trim();
 
     fetch(`https://api.punkapi.com/v2/beers?beer_name=${value}&page=${pageStart}&per_page=80`)
         .then((response) => response.json())
         .then((result) => {
 
             if (!result.length){
-                return mainContainer.innerHTML = CreateBeer.getError();
+                return MAIN_CONTAINER.innerHTML = CreateBeer.getError();
             }
 
-            mainContainer.innerHTML = '';
-            beerListArray.length = 0;
+            MAIN_CONTAINER.innerHTML = '';
+            BEER_LIST.length = 0;
             showBeerList(result)
         })
 }
@@ -68,8 +68,8 @@ export function showBeerList(source){
             description: `${item.description}`
         });
 
-        beerListArray.push(newBeer)
-        mainContainer.innerHTML += newBeer.getInnerHtml()
+        BEER_LIST.push(newBeer)
+        MAIN_CONTAINER.innerHTML += newBeer.getInnerHtml()
     })
 }
 
