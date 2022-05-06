@@ -35,4 +35,12 @@ export const VALIDATION = {
                     border : '1px solid rgba(246, 15, 15, 0.622)',
                     backgroundColor : 'rgba(215,24,24,0.57)',
                 }
-            }
+            };
+export const ITEMS = {
+    ADD: 'Add',
+    REMOVE: 'Remove'
+}
+export const FAVOURITE_BTN = document.getElementById('favouriteBtn');
+export const FAVOURITE_LIST = [];
+export const FAVOURITE_MODAL = document.getElementById('modalFavourites');
+export const FAVOURITE_INNER = document.getElementById('favouritesContent');

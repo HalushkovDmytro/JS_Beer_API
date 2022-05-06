@@ -8,7 +8,9 @@ import {
     ADD_MORE_BTN,
     NO_MORE_DATA,
     STYLE,
-    VALIDATION
+    VALIDATION,
+    FAVOURITE_LIST,
+    FAVOURITE_INNER, ITEMS,
 } from "./Variables.js";
 import {CreateBeer} from './CreateBeer.js';
 
@@ -28,10 +30,10 @@ export function startSearch(){
 }
 
 export function declineSearch(){
-    inputValidation(INPUT_BOX, VALIDATION.INVALID)
+    inputValidation(INPUT_BOX, VALIDATION.INVALID);
 
     setTimeout( () => {
-        inputValidation(INPUT_BOX, VALIDATION.VALID)
+        inputValidation(INPUT_BOX, VALIDATION.VALID);
     }, 500)
 }
 
@@ -43,9 +45,9 @@ export function inputValidation(input, validation){
 }
 
 export function createRecentSearch(){
-    const uniqueArray = Array.from(new Set(RECENT_ARRAY))
+    const uniqueArray = Array.from(new Set(RECENT_ARRAY));
 
-    const isIncludes = uniqueArray.includes(INPUT_BOX.value.toLowerCase())
+    const isIncludes = uniqueArray.includes(INPUT_BOX.value.toLowerCase());
 
     if (isIncludes) {
         return
@@ -72,20 +74,22 @@ export function getBeer() {
 
             ADD_MORE_BTN.style.display = STYLE.DISPLAY.BLOCK;
             BEER_LIST.length = 0;
-            showBeerList(result)
+            showBeerList(result);
         })
 }
 
 export function showBeerList(source){
     source.forEach((item) => {
         const newBeer = new CreateBeer({
-            id: `${item.id}`,
+            mainId: `${item.id}`,
             name:`${item.name}`,
             image: `${item.image_url}`,
-            description: `${item.description}`
+            description: `${item.description}`,
+            addBtnId: `Add${item.id}`,
         });
 
         BEER_LIST.push(newBeer);
+
         MAIN_CONTAINER.innerHTML += newBeer.getInnerHtml();
     })
 }
@@ -105,15 +109,15 @@ export function additionalItems(){ //adding 5 more items to the list
                 }
             }
 
-            showBeerList(result)
+            showBeerList(result);
         })
 };
 
 export function warningModal(){
-    showModal(STYLE.DISPLAY.FLEX, STYLE.OPACITY.FALSE)
+    showModal(STYLE.DISPLAY.FLEX, STYLE.OPACITY.FALSE);
 
     setTimeout(() => {
-        showModal(STYLE.DISPLAY.NONE, STYLE.OPACITY.TRUE)
+        showModal(STYLE.DISPLAY.NONE, STYLE.OPACITY.TRUE);
     }, 2000)
 }
 
@@ -121,5 +125,52 @@ export function showModal(modalDisplay, buttonOpacity){
     ADD_MORE_BTN.style.opacity = buttonOpacity;
     NO_MORE_DATA.style.display = modalDisplay;
 }
+//create new item in the modal display
+export function addToFavourite(el){
+    const addItem = BEER_LIST.find( (item) => item.addBtnId === el.id);
 
+    const newBeer = new CreateBeer({
+        mainIdModal: `${addItem.mainId}`,
+        nameModal: `${addItem.name}`,
+        imageModal: `${addItem.image}`,
+        descriptionModal: `${addItem.description}`,
+        addRemoveId: `RemoveId${addItem.mainId}`
+    });
 
+    FAVOURITE_INNER.innerHTML += newBeer.getModalInnerHtml();
+    el.classList.add('addBtnActive');
+    el.innerText = ITEMS.REMOVE;
+    FAVOURITE_LIST.push(newBeer);
+}
+//removing items from the list of "Favourites" and from modal display
+export function removeFromFavourite(el){
+    const removePoint = BEER_LIST.find( (item) => item.addBtnId === el.id);
+
+    const removeModal = FAVOURITE_LIST.find( (item) => item.mainIdModal === removePoint.mainId);
+
+    const removeIndex = FAVOURITE_LIST.findIndex( (item) => item.addBtnId === el.id);
+
+    if (!removeModal){
+        return
+    }
+
+    document.getElementById(removeModal.mainIdModal).remove();
+    FAVOURITE_LIST.splice(removeIndex, 1);
+    el.classList.remove('addBtnActive');
+    el.innerText = ITEMS.ADD;
+}
+
+export function removeFromModal(click){
+    const deletingItem = FAVOURITE_LIST.find( (item) => item.addRemoveId === click.id);
+
+    document.getElementById(deletingItem.mainIdModal).remove() //remove from modal display
+
+    const mainListItem = BEER_LIST.find( (item) => item.mainId === deletingItem.mainIdModal);
+
+    document.getElementById(mainListItem.addBtnId).classList.remove('addBtnActive');
+    document.getElementById(mainListItem.addBtnId).innerText = ITEMS.ADD;
+
+    const removeIndex = FAVOURITE_LIST.findIndex( (item) => item.addRemoveId === click.id);
+
+    FAVOURITE_LIST.splice(removeIndex, 1);
+}

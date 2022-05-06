@@ -170,6 +170,7 @@ transform: translate(-2px, -2px);
 }
 
 .beerDiv{
+    position: relative;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -180,12 +181,6 @@ transform: translate(-2px, -2px);
     border-radius: 10px;
     background-color: rgba(211,211,211, 0.6);
     color: black;
-}
-
-.beerContentContainer{
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
 }
 
 .beerTitle{
@@ -273,8 +268,6 @@ transform: translate(-2px, -2px);
     background-color: white;
     color: #000;
     padding: 50px;
-    /*width: 500px;*/
-    /*height: 300px;*/
 }
 
 .arrowUp {
@@ -294,3 +287,130 @@ transform: translate(-2px, -2px);
 .arrowUpHide{
     opacity: 0;
 }
+
+.addBtn {
+    position: absolute;
+    text-align: center;
+    right: 5px;
+    top: 5px;
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 10px 0;
+    width: 70px;
+    cursor: pointer;
+    background-color: white;
+    transition: all .4s ease-in-out;
+}
+
+.addBtn:hover{
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+    border: 1px solid transparent;
+}
+
+.addBtnActive {
+    border: 1px solid white;
+    background-color: red;
+    color: white;
+}
+
+.modalFavourites{
+    display: none;
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    z-index: 5;
+}
+
+.favouritesContent{
+    z-index: 6;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    position: relative;
+    background-color: #fff;
+    width: 700px;
+    height: 500px;
+    top: 110px;
+    margin: 0 auto;
+    padding: 30px;
+    overflow-y: auto;
+}
+
+.beerDivModal{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    padding:10px;
+    border: 1px solid lightgray;
+    border-radius: 10px;
+    background-color: rgba(211,211,211, 0.6);
+    color: black;
+    transition: all .4s ease-in-out;
+}
+
+.beerDivModal:hover{
+    border: 1px solid black;
+    transform: translateX(-2px);
+}
+.contentContainerModal{
+    display: flex;
+    align-items: center;
+}
+
+.beerTitleModal{
+    font-size: 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.beerImgContainerModal{
+    padding: 20px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.beerImgModal{
+    text-align: center;
+    max-height: 240px;
+}
+
+.beerDescriptionModal{
+    font-size: 16px;
+    padding: 10px 20px;
+}
+.beerPriceModal{
+    font-size: 24px;
+    text-align: center;
+    padding: 20px;
+}
+
+.RemoveBtn{
+    position: absolute;
+    padding: 10px;
+    font-size: 18px;
+    right: 30px;
+    top: 30px;
+    border: 1px solid black;
+    cursor: pointer;
+    transition: all .4s ease-in-out;
+    border-radius: 10px;
+}
+
+.RemoveBtn:hover{
+    background-color: red;
+    color: #fff;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0px 18px 36px -18px inset;
+    border: 1px solid transparent;
+}
+
