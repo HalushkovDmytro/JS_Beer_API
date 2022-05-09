@@ -145,9 +145,7 @@ export function addToFavourite(el){
 //removing items from the list of "Favourites" and from modal display
 export function removeFromFavourite(el){
     const removePoint = BEER_LIST.find( (item) => item.addBtnId === el.id);
-
     const removeModal = FAVOURITE_LIST.find( (item) => item.mainIdModal === removePoint.mainId);
-
     const removeIndex = FAVOURITE_LIST.findIndex( (item) => item.addBtnId === el.id);
 
     if (!removeModal){
@@ -162,15 +160,11 @@ export function removeFromFavourite(el){
 
 export function removeFromModal(click){
     const deletingItem = FAVOURITE_LIST.find( (item) => item.addRemoveId === click.id);
-
-    document.getElementById(deletingItem.mainIdModal).remove() //remove from modal display
-
     const mainListItem = BEER_LIST.find( (item) => item.mainId === deletingItem.mainIdModal);
-
-    document.getElementById(mainListItem.addBtnId).classList.remove('addBtnActive');
-    document.getElementById(mainListItem.addBtnId).innerText = ITEMS.ADD;
-
     const removeIndex = FAVOURITE_LIST.findIndex( (item) => item.addRemoveId === click.id);
 
+    document.getElementById(deletingItem.mainIdModal).remove() //remove from modal display
+    document.getElementById(mainListItem.addBtnId).classList.remove('addBtnActive');
+    document.getElementById(mainListItem.addBtnId).innerText = ITEMS.ADD;
     FAVOURITE_LIST.splice(removeIndex, 1);
 }
