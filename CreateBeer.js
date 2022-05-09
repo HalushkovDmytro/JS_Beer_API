@@ -1,8 +1,4 @@
 export class CreateBeer {
-    id
-    name
-    image
-    description
 
     constructor(BeerData) {
         Object.assign(this, {...BeerData})
@@ -10,7 +6,7 @@ export class CreateBeer {
 
     getInnerHtml(){
         return `
-             <div class="beerDiv" id="${this.id}">
+             <div class="beerDiv" id="${this.mainId}">
                  <h3 class="beerTitle">${this.name}</h3>
                  <div class="beerImgContainer">
                      <img class="beerImg" src="${this.image || ('./img/beerBottle2.png') } " alt="beerImage">
@@ -19,6 +15,22 @@ export class CreateBeer {
                      <p class="beerPrice">
                          PRICE
                      </p>
+                     <a class="addBtn" id="${this.addBtnId}">Add</a>
+             </div>
+        `
+    }
+    getModalInnerHtml(){
+        return `
+             <div class="beerDivModal" id="${this.mainIdModal}">
+                 <h3 class="beerTitleModal">${this.nameModal}</h3>
+                    <div class="contentContainerModal">
+                        <div class="beerImgContainer">
+                            <img class="beerImgModal" src="${this.imageModal || ('./img/beerBottle2.png') } " alt="beerImage">
+                        </div>
+                        <p class="beerDescriptionModal">${this.descriptionModal}</p>
+                    </div>
+                     <a class="RemoveBtn" id="${this.addRemoveId}">Remove</a>
+                     
              </div>
         `
     }
