@@ -75,7 +75,6 @@ ADD_MORE_BTN.addEventListener('click', additionalItems);
 
 MAIN_CONTAINER.addEventListener('click', function addRemoveToFavourites(event){
     const target = event.target;
-
     const isAddBtn = target.classList.contains('addBtn');
 
     if (!isAddBtn){
@@ -94,6 +93,7 @@ FAVOURITE_BTN.addEventListener('click', function showFavourite(){
     if (!FAVOURITE_LIST.length){
         return
     }
+    
     FAVOURITE_MODAL.style.display = STYLE.DISPLAY.BLOCK;
 })
 
