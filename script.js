@@ -12,7 +12,7 @@ import {
     FAVOURITE_MODAL,
     STYLE,
     FAVOURITE_INNER,
-    ITEMS
+    ITEMS, BEER_LIST
 } from "./Variables.js"
 import {
     validInput,
@@ -21,7 +21,10 @@ import {
     additionalItems,
     addToFavourite,
     removeFromFavourite,
-    removeFromModal
+    removeFromModal,
+    openSingleModal,
+    recentStorage,
+    modalStorage,
 } from './Functions.js'
 
 INPUT_BOX.addEventListener('keyup',  function onKeyValidation(e){
@@ -90,10 +93,6 @@ MAIN_CONTAINER.addEventListener('click', function addRemoveToFavourites(event){
 })
 
 FAVOURITE_BTN.addEventListener('click', function showFavourite(){
-    if (!FAVOURITE_LIST.length){
-        return
-    }
-    
     FAVOURITE_MODAL.style.display = STYLE.DISPLAY.BLOCK;
 })
 
@@ -115,4 +114,41 @@ FAVOURITE_INNER.addEventListener('click', function modalItemRemove(event){
     removeFromModal(target);
 })
 
+MAIN_CONTAINER.addEventListener('click', function singleViewModal(event){
+    const target = event.target;
+    const isTitle = target.classList.contains('beerTitle');
 
+    if (!isTitle){
+        return
+    }
+
+    openSingleModal(target)
+})
+
+document.getElementById('singleModalContent').addEventListener('click', function singleViewModalBtn(event) {
+    const target = event.target;
+    const isAddBtn = target.classList.contains('addBtn');
+
+    if (!isAddBtn){
+        return
+    }
+
+    if (target.innerText === ITEMS.ADD){
+        addToFavourite(target);
+    } 
+    
+    if (target.innerText === ITEMS.REMOVE){
+        removeFromFavourite(target);
+    }
+});
+
+document.addEventListener('keyup', function(e) {
+    if (e.keyCode === KEYCODE.ESCAPE){
+        document.getElementById('singleModalContainer').style.display = STYLE.DISPLAY.NONE
+    }
+})
+
+window.addEventListener('load', function onLoad() {
+    recentStorage();
+    modalStorage();
+})
