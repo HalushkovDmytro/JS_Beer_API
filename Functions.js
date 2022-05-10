@@ -50,7 +50,7 @@ export function inputValidation(input, validation){
 export function createRecentSearch(){
     let LocalStorageitems = JSON.parse(localStorage.getItem('recent'));
 
-    if (LocalStorageitems == null){
+    if (LocalStorageitems === null){
         LocalStorageitems = [];
     };
 
@@ -162,7 +162,7 @@ export function addToFavourite(el){
 
     let existingEntries = JSON.parse(localStorage.getItem("favoriteModal"));
 
-    if (existingEntries == null) {
+    if (existingEntries === null) {
         existingEntries = [];
     }
 
