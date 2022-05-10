@@ -9,7 +9,8 @@ export const ADD_MORE_BTN = document.getElementById('addMoreBtn');
 export const RECENT_ARRAY = []; //recent searched elements
 export const BEER_LIST = []; //the list of all items showed
 export const KEYCODE = {
-                ENTER : 13
+                ENTER : 13,
+                ESCAPE: 27
             };
 export const STYLE = {
                 DISPLAY: {
@@ -44,3 +45,4 @@ export const FAVOURITE_BTN = document.getElementById('favouriteBtn');
 export const FAVOURITE_LIST = [];
 export const FAVOURITE_MODAL = document.getElementById('modalFavourites');
 export const FAVOURITE_INNER = document.getElementById('favouritesContent');
+

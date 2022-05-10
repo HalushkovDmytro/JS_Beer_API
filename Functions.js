@@ -10,7 +10,8 @@ import {
     STYLE,
     VALIDATION,
     FAVOURITE_LIST,
-    FAVOURITE_INNER, ITEMS,
+    FAVOURITE_INNER,
+    ITEMS,
 } from "./Variables.js";
 import {CreateBeer} from './CreateBeer.js';
 
@@ -26,7 +27,9 @@ export function startSearch(){
     INPUT_BOX.placeholder = INPUT_BOX.value;
     INPUT_BOX.value = '';
     NO_MORE_DATA.style.display = STYLE.DISPLAY.NONE;
-    window.scrollTo(0, 100 + RECENT_ARRAY.length * 40);
+    setTimeout(()=> {
+        window.scrollTo(0, 100 + RECENT_ARRAY.length * 40);
+    },500)
 }
 
 export function declineSearch(){
@@ -45,18 +48,40 @@ export function inputValidation(input, validation){
 }
 
 export function createRecentSearch(){
-    const uniqueArray = Array.from(new Set(RECENT_ARRAY));
+    let LocalStorageitems = JSON.parse(localStorage.getItem('recent'));
 
+    if (LocalStorageitems == null){
+        LocalStorageitems = [];
+    };
+
+    Object.assign(RECENT_ARRAY, LocalStorageitems);
+
+    const uniqueArray = Array.from(new Set(RECENT_ARRAY));
     const isIncludes = uniqueArray.includes(INPUT_BOX.value.toLowerCase());
 
     if (isIncludes) {
         return
     }
 
+    LocalStorageitems.push(INPUT_BOX.value)
+    localStorage.setItem('recent', JSON.stringify(LocalStorageitems));
     RECENT_CONTAINER.innerHTML += `
-        <div class="recentEl" id="${INPUT_BOX.value}">${INPUT_BOX.value}</div>
+            <div class="recentEl" id="${INPUT_BOX.value}">${INPUT_BOX.value}</div>
         `;
-    RECENT_ARRAY.push(INPUT_BOX.value);
+};
+
+export function recentStorage(){
+        const localRecentList = JSON.parse(localStorage.getItem('recent'));
+
+        if (!localRecentList){
+            return;
+        }
+
+        localRecentList.forEach( (item) => {
+            RECENT_CONTAINER.innerHTML += `
+                     <div class="recentEl" id="${item}">${item}</div>
+                 `;
+        })
 };
 
 export function getBeer() {
@@ -79,7 +104,7 @@ export function getBeer() {
 }
 
 export function showBeerList(source){
-    source.forEach((item) => {
+    source.forEach( (item) => {
         const newBeer = new CreateBeer({
             mainId: `${item.id}`,
             name:`${item.name}`,
@@ -89,7 +114,6 @@ export function showBeerList(source){
         });
 
         BEER_LIST.push(newBeer);
-
         MAIN_CONTAINER.innerHTML += newBeer.getInnerHtml();
     })
 }
@@ -125,10 +149,9 @@ export function showModal(modalDisplay, buttonOpacity){
     ADD_MORE_BTN.style.opacity = buttonOpacity;
     NO_MORE_DATA.style.display = modalDisplay;
 }
-//create new item in the modal display
+
 export function addToFavourite(el){
     const addItem = BEER_LIST.find( (item) => item.addBtnId === el.id);
-
     const newBeer = new CreateBeer({
         mainIdModal: `${addItem.mainId}`,
         nameModal: `${addItem.name}`,
@@ -137,21 +160,49 @@ export function addToFavourite(el){
         addRemoveId: `RemoveId${addItem.mainId}`
     });
 
-    FAVOURITE_INNER.innerHTML += newBeer.getModalInnerHtml();
+    let existingEntries = JSON.parse(localStorage.getItem("favoriteModal"));
+
+    if (existingEntries == null) {
+        existingEntries = [];
+    }
+
+    existingEntries.push(newBeer);
+    localStorage.setItem("favoriteModal", JSON.stringify(existingEntries));
+    FAVOURITE_INNER.innerHTML += newBeer.getModalInnerHtml(newBeer.mainIdModal);
     el.classList.add('addBtnActive');
     el.innerText = ITEMS.REMOVE;
     FAVOURITE_LIST.push(newBeer);
-}
-//removing items from the list of "Favourites" and from modal display
-export function removeFromFavourite(el){
-    const removePoint = BEER_LIST.find( (item) => item.addBtnId === el.id);
-    const removeModal = FAVOURITE_LIST.find( (item) => item.mainIdModal === removePoint.mainId);
-    const removeIndex = FAVOURITE_LIST.findIndex( (item) => item.addBtnId === el.id);
+};
 
-    if (!removeModal){
-        return
+export function modalStorage(){
+    let localStorageModal = JSON.parse(localStorage.getItem('favoriteModal'));
+
+    if (localStorageModal === null){
+        localStorageModal = [];
     }
 
+    localStorageModal.forEach( (item) => {
+        const newBeer = new CreateBeer({
+            mainIdModal: `${item.mainIdModal}`,
+            nameModal: `${item.nameModal}`,
+            imageModal: `${item.imageModal}`,
+            descriptionModal: `${item.descriptionModal}`,
+            addRemoveId: `RemoveId${item.mainIdModal}`
+        });
+
+    FAVOURITE_INNER.innerHTML += newBeer.getModalInnerHtml();
+    })
+};
+
+export function removeFromFavourite(el){
+    const removeItem = BEER_LIST.find( (item) => item.addBtnId === el.id);
+    const removeModal = FAVOURITE_LIST.find( (item) => item.mainIdModal === removeItem.mainId);
+    const removeIndex = FAVOURITE_LIST.findIndex( (item) => item.addBtnId === el.id);
+    const existingEntries = JSON.parse(localStorage.getItem('favoriteModal'));
+    const localRemoveIndex = existingEntries.findIndex( (item) => item.mainIdModal === removeItem.mainId);
+
+    existingEntries.splice(localRemoveIndex, 1);
+    localStorage.setItem('favoriteModal', JSON.stringify(existingEntries));
     document.getElementById(removeModal.mainIdModal).remove();
     FAVOURITE_LIST.splice(removeIndex, 1);
     el.classList.remove('addBtnActive');
@@ -162,9 +213,28 @@ export function removeFromModal(click){
     const deletingItem = FAVOURITE_LIST.find( (item) => item.addRemoveId === click.id);
     const mainListItem = BEER_LIST.find( (item) => item.mainId === deletingItem.mainIdModal);
     const removeIndex = FAVOURITE_LIST.findIndex( (item) => item.addRemoveId === click.id);
+    const existingEntries = JSON.parse(localStorage.getItem('favoriteModal'));
+    const localRemoveIndex = existingEntries.findIndex( (item) => item.mainIdModal === mainListItem.mainId);
 
     document.getElementById(deletingItem.mainIdModal).remove() //remove from modal display
     document.getElementById(mainListItem.addBtnId).classList.remove('addBtnActive');
     document.getElementById(mainListItem.addBtnId).innerText = ITEMS.ADD;
+    existingEntries.splice(localRemoveIndex, 1);
+    localStorage.setItem('favoriteModal', JSON.stringify(existingEntries));
     FAVOURITE_LIST.splice(removeIndex, 1);
 }
+
+export function openSingleModal(el){
+    const singleModal = BEER_LIST.find( (item) => item.name === el.id);
+    const singleModalBeer = new CreateBeer({
+        mainId: `${singleModal.mainId}`,
+        name: `${singleModal.name}`,
+        image: `${singleModal.image}`,
+        description: `${singleModal.description}`,
+        addBtnId: `${singleModal.addBtnId}`,
+    });
+
+    document.getElementById('singleModalContent').innerHTML += singleModalBeer.getSingleModalHtml();
+    document.getElementById('singleModalContainer').style.display = STYLE.DISPLAY.BLOCK;
+}
+
