@@ -135,8 +135,9 @@ document.getElementById('singleModalContent').addEventListener('click', function
 
     if (target.innerText === ITEMS.ADD){
         addToFavourite(target);
-
-    } else if (target.innerText === ITEMS.REMOVE){
+    } 
+    
+    if (target.innerText === ITEMS.REMOVE){
         removeFromFavourite(target);
     }
 });
